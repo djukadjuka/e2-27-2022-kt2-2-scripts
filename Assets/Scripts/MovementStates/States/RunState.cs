@@ -8,6 +8,7 @@ public class RunState : MovementBaseState
     public override void EnterState(MovementStateManager movement)
     {
         movement.anim.SetBool("Running", true);
+        movement.ConfigureControllerNormal();
     }
 
     public override void UpdateState(MovementStateManager movement)

@@ -7,6 +7,7 @@ public class CrouchState : MovementBaseState
     public override void EnterState(MovementStateManager movement)
     {
         movement.anim.SetBool("Crouching", true);
+        movement.ConfigureControllerCrouch();
     }
 
     public override void UpdateState(MovementStateManager movement)

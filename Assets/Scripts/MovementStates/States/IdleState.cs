@@ -7,7 +7,7 @@ public class IdleState : MovementBaseState
 {
     public override void EnterState(MovementStateManager movement)
     {
-
+        movement.ConfigureControllerNormal();
     }
 
     public override void UpdateState(MovementStateManager movement)

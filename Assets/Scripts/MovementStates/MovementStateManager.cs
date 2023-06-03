@@ -17,6 +17,28 @@ public class MovementStateManager : MonoBehaviour
     [HideInInspector] public float vtInput;
     CharacterController controller;
 
+    #region Controller constants
+    float controllerHeightNormalSize = 1.8f;
+    float controllerYCenterNormal = 0.9f;
+
+    float controllerHeightCrouchSize = 1.5f;
+    float controllerYCenterCrouch = 0.74f;
+
+    public void ConfigureControllerNormal() 
+    { 
+        controller.height = controllerHeightNormalSize;
+        controller.center = new Vector3(0, controllerYCenterNormal, 0);
+    }
+
+    public void ConfigureControllerCrouch()
+    {
+        controller.height = controllerHeightCrouchSize;
+        controller.center = new Vector3(0, controllerYCenterCrouch, 0);
+    }
+
+    #endregion
+
+
     #endregion
 
     #region Ground Check
@@ -30,12 +52,13 @@ public class MovementStateManager : MonoBehaviour
 
     #region Gravity
     [SerializeField] float gravity = -9.81f;
-    [SerializeField] float jumpForce = 10f;
+    [SerializeField] float jumpForce = 7.5f;
     [SerializeField] public bool jumped;
     Vector3 velocity;
 
     #endregion
 
+    #region Movement States
     public MovementBaseState previousState;
     public MovementBaseState currentState;
 
@@ -44,6 +67,8 @@ public class MovementStateManager : MonoBehaviour
     public CrouchState Crouch = new CrouchState();
     public RunState Run = new RunState();
     public JumpState Jump = new JumpState();
+
+    #endregion
 
     [HideInInspector] public Animator anim;
     // Start is called before the first frame update
@@ -87,7 +112,9 @@ public class MovementStateManager : MonoBehaviour
     public bool IsGrounded()
     {
         spherePos = new Vector3(transform.position.x, transform.position.y - groundYOffset, transform.position.z);
-        return Physics.CheckSphere(spherePos, controller.radius - 0.05f, groundMask);
+        bool isGrounded = Physics.CheckSphere(spherePos, controller.radius - 0.05f, groundMask);
+
+        return isGrounded;
     }
 
     public void Gravity()

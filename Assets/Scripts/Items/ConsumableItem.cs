@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Items
 {
-    public interface IGameItem
+    public class ConsumableItem : PlainItemData
     {
-        public void Use();
+        public void ConsumeItem()
+        {
+
+        } 
     }
 }
