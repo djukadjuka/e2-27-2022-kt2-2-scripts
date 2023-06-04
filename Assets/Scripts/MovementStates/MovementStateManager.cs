@@ -21,8 +21,10 @@ public class MovementStateManager : MonoBehaviour
     float controllerHeightNormalSize = 1.8f;
     float controllerYCenterNormal = 0.9f;
 
-    float controllerHeightCrouchSize = 1.5f;
-    float controllerYCenterCrouch = 0.74f;
+    float controllerHeightCrouchSize = 1.06f;
+    //float controllerHeightCrouchSize = 1.5f;
+    float controllerYCenterCrouch = 0.52f;
+    //float controllerYCenterCrouch = 0.74f;
 
     public void ConfigureControllerNormal() 
     { 
