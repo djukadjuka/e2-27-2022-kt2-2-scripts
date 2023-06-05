@@ -5,22 +5,27 @@ using Cinemachine;
 
 public class AimStateManager : MonoBehaviour
 {
-    [SerializeField] public AimBaseState currentState;
-    public NormalAimState Normal = new NormalAimState();
-    public ZoomAimState Zoom = new ZoomAimState();
-
+    [Header("General Attributes")]
+    [SerializeField] public bool UpdateEnabled;
     [SerializeField] float mouseSense = 1;
     public float xAxis;
     public float yAxis;
-    [SerializeField] Transform camFollowPos;
 
-    [HideInInspector] public Animator anim;
-    [HideInInspector] public CinemachineVirtualCamera vCam;
+    [Header("Aim Zoom States")]
+    [SerializeField] public AimBaseState currentState;
+    public NormalAimState Normal = new NormalAimState();
+    public ZoomAimState Zoom = new ZoomAimState();
     public float zoomFov = 30;
     public float normalFov;
     public float currentFov;
     public float fovSmoothSpeed = 20;
 
+    [Header("Components")]
+    [HideInInspector] public Animator anim;
+    [HideInInspector] public CinemachineVirtualCamera vCam;
+    [SerializeField] Transform camFollowPos;
+
+    [Header("Aim Configuration")]
     [SerializeField] Transform aimPos;
     [SerializeField] float aimSmoothSpeed = 20;
     [SerializeField] LayerMask aimMask;
@@ -38,6 +43,11 @@ public class AimStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!UpdateEnabled)
+        {
+            return;
+        }
+
         xAxis += Input.GetAxisRaw("Mouse X") * mouseSense;
         yAxis -= Input.GetAxisRaw("Mouse Y") * mouseSense;
         yAxis = Mathf.Clamp(yAxis, -80, 80);
@@ -50,6 +60,7 @@ public class AimStateManager : MonoBehaviour
         if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
         {
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
+            
         }
 
         currentState.UpdateState(this);

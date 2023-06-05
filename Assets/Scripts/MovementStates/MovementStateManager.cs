@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class MovementStateManager : MonoBehaviour
 {
+    [Header("General")]
+    [SerializeField] public bool UpdateEnabled;
+
     #region Movement
+    [Header("Movement Speeds")]
     public float currentMoveSpeed = 3f;
     public float walkSpeed = 3;
     public float walkBackSpeed = 2;
@@ -12,6 +16,7 @@ public class MovementStateManager : MonoBehaviour
     public float runBackSpeed = 5;
     public float crouchSpeed = 2;
     public float crouchBackSpeed = 1;
+
     [HideInInspector] public Vector3 dir;
     [HideInInspector] public float hzInput;
     [HideInInspector] public float vtInput;
@@ -22,21 +27,7 @@ public class MovementStateManager : MonoBehaviour
     float controllerYCenterNormal = 0.9f;
 
     float controllerHeightCrouchSize = 1.06f;
-    //float controllerHeightCrouchSize = 1.5f;
     float controllerYCenterCrouch = 0.52f;
-    //float controllerYCenterCrouch = 0.74f;
-
-    public void ConfigureControllerNormal() 
-    { 
-        controller.height = controllerHeightNormalSize;
-        controller.center = new Vector3(0, controllerYCenterNormal, 0);
-    }
-
-    public void ConfigureControllerCrouch()
-    {
-        controller.height = controllerHeightCrouchSize;
-        controller.center = new Vector3(0, controllerYCenterCrouch, 0);
-    }
 
     #endregion
 
@@ -44,6 +35,7 @@ public class MovementStateManager : MonoBehaviour
     #endregion
 
     #region Ground Check
+    [Header("Ground check")]
     [SerializeField]
     float groundYOffset;
     [SerializeField]
@@ -53,14 +45,16 @@ public class MovementStateManager : MonoBehaviour
     #endregion
 
     #region Gravity
+    [Header("Gravity and jumping")]
     [SerializeField] float gravity = -9.81f;
-    [SerializeField] float jumpForce = 7.5f;
+    [SerializeField] float jumpForce = 6f;
     [SerializeField] public bool jumped;
     Vector3 velocity;
 
     #endregion
 
     #region Movement States
+    [Header("Movement States")]
     public MovementBaseState previousState;
     public MovementBaseState currentState;
 
@@ -85,6 +79,11 @@ public class MovementStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!UpdateEnabled)
+        {
+            return;
+        }
+
         GetDirectionAndMove();
         Gravity();
 
@@ -144,4 +143,17 @@ public class MovementStateManager : MonoBehaviour
     public void Jumped() => jumped = true;
 
     void Falling() => anim.SetBool("Falling", !IsGrounded());
+
+    public void ConfigureControllerNormal()
+    {
+        controller.height = controllerHeightNormalSize;
+        controller.center = new Vector3(0, controllerYCenterNormal, 0);
+    }
+
+    public void ConfigureControllerCrouch()
+    {
+        controller.height = controllerHeightCrouchSize;
+        controller.center = new Vector3(0, controllerYCenterCrouch, 0);
+    }
+
 }
