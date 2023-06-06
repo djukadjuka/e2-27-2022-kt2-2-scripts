@@ -38,11 +38,11 @@ public class ObjectivePanelManager : MonoBehaviour
 
     public void FadeTextIn()
     {
-        animator.Play("objectiveText_fadeIn");
+        animator.Play("objectivePanel_fadeTextIn");
     }
 
     public void FadeTextOut()
     {
-        animator.Play("objectiveText_fadeOut");
+        animator.Play("objectivePanel_fadeTextOut");
     }
 }

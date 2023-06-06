@@ -6,6 +6,9 @@ public class MovementStateManager : MonoBehaviour
 {
     [Header("General")]
     [SerializeField] public bool UpdateEnabled;
+    [SerializeField] public bool RunEnabled;
+    [SerializeField] public bool CrouchEnabled;
+    [SerializeField] public bool JumpEnabled;
 
     #region Movement
     [Header("Movement Speeds")]

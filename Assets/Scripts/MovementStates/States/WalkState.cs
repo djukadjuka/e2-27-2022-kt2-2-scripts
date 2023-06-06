@@ -13,11 +13,11 @@ public class WalkState : MovementBaseState
 
     public override void UpdateState(MovementStateManager movement)
     {
-        if (Input.GetKey(Constants.KeyRun))
+        if (Input.GetKey(Constants.KeyRun) && movement.RunEnabled)
         {
             ExitState(movement, movement.Run);
         }
-        else if (Input.GetKey(Constants.KeyCrouch))
+        else if (Input.GetKey(Constants.KeyCrouch) && movement.CrouchEnabled)
         {
             ExitState(movement, movement.Crouch);
         }
@@ -35,7 +35,7 @@ public class WalkState : MovementBaseState
             movement.currentMoveSpeed = movement.walkSpeed;
         }
 
-        if (Input.GetKey(Constants.KeyJump))
+        if (Input.GetKey(Constants.KeyJump) && movement.JumpEnabled)
         {
             movement.previousState = this;
             ExitState(movement, movement.Jump);

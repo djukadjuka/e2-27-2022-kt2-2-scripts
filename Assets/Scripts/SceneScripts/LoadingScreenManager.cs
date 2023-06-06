@@ -26,6 +26,7 @@ public class LoadingScreenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         System.Random rand = new System.Random();
         selectedQuote = quotes[rand.Next(0, quotes.Count - 1)];
         quoteUI.SetText(selectedQuote);

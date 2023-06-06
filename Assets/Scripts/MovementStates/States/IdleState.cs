@@ -14,7 +14,7 @@ public class IdleState : MovementBaseState
     {
         if(movement.dir.magnitude > 0.1f)
         {
-            if (Input.GetKey(Constants.KeyRun))
+            if (Input.GetKey(Constants.KeyRun) && movement.RunEnabled)
             {
                 movement.SwitchState(movement.Run);
             }
@@ -24,12 +24,12 @@ public class IdleState : MovementBaseState
             }
         }
 
-        if (Input.GetKey(Constants.KeyCrouch))
+        if (Input.GetKey(Constants.KeyCrouch) && movement.CrouchEnabled)
         {
             movement.SwitchState(movement.Crouch);
         }
 
-        if (Input.GetKeyDown(Constants.KeyJump))
+        if (Input.GetKeyDown(Constants.KeyJump) && movement.JumpEnabled)
         {
             movement.previousState = this;
             movement.SwitchState(movement.Jump);

@@ -12,7 +12,7 @@ public class CrouchState : MovementBaseState
 
     public override void UpdateState(MovementStateManager movement)
     {
-        if (Input.GetKey(Constants.KeyRun))
+        if (Input.GetKey(Constants.KeyRun) && movement.RunEnabled)
         {
             ExitState(movement, movement.Run);
         }

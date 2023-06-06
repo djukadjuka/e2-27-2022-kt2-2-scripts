@@ -32,7 +32,7 @@ public class RunState : MovementBaseState
             movement.currentMoveSpeed = movement.runSpeed;
         }
 
-        if (Input.GetKeyDown(Constants.KeyJump))
+        if (Input.GetKeyDown(Constants.KeyJump) && movement.JumpEnabled)
         {
             movement.previousState = this;
             ExitState(movement, movement.Jump);

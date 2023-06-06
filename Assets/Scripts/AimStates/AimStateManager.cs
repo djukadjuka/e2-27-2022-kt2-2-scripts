@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using TMPro;
+using Assets;
 
 public class AimStateManager : MonoBehaviour
-{
+{ 
     [Header("General Attributes")]
     [SerializeField] public bool UpdateEnabled;
     [SerializeField] float mouseSense = 1;
@@ -29,6 +31,9 @@ public class AimStateManager : MonoBehaviour
     [SerializeField] Transform aimPos;
     [SerializeField] float aimSmoothSpeed = 20;
     [SerializeField] LayerMask aimMask;
+    [SerializeField] GameObject ItemAimedAt;
+    [SerializeField] GameObject ItemNameDisplay;
+    [SerializeField] float ItemInteractionDistance = 6.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -60,10 +65,55 @@ public class AimStateManager : MonoBehaviour
         if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
         {
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
-            
+
+            // If aimed at item
+            if (hit.collider.gameObject.CompareTag("Item") && hit.distance <= ItemInteractionDistance)
+            {
+                // If no item aimed at before or aimed at different item than before
+                if (!ItemAimedAt || ItemAimedAt != hit.collider.gameObject)
+                {
+                    ItemAimedAt = hit.collider.gameObject;
+                    ItemAimedAt.GetComponent<ItemMetaData>().Highlight();
+                    StartCoroutine(RevealItemName());
+                }
+            }
+            // If not aimed at something with the layer Items and was aimed at item before
+            else if (ItemAimedAt)
+            {
+                ItemAimedAt.GetComponent<ItemMetaData>().UnHighlight();
+                ItemAimedAt = null;
+                HideItemNameDisplay();
+            }
         }
 
         currentState.UpdateState(this);
+
+        InteractWith();
+    }
+
+    public void InteractWith()
+    {
+        if (Input.GetKeyDown(Constants.KeyUse))
+        {
+            if (ItemAimedAt)
+            {
+                ItemMetaData meta = ItemAimedAt.GetComponent<ItemMetaData>();
+                if (meta.CanBePutInInventory)
+                {
+                    // TODO: Extend with adding this object to players inv
+                    Destroy(ItemAimedAt);
+                    ItemAimedAt = null;
+                    HideItemNameDisplay();
+                }
+            }
+        }
+    }
+
+    private void HideItemNameDisplay()
+    {
+        ItemNameDisplay.GetComponent<TextMeshProUGUI>().SetText("");
+        ItemNameDisplay.GetComponent<TextMeshProUGUI>().color = new Color(255, 255, 255, 0);
+        ItemNameDisplay.GetComponent<Animator>().Play("ItemNameDisplay_Idle");
     }
 
     private void LateUpdate()
@@ -76,5 +126,14 @@ public class AimStateManager : MonoBehaviour
     {
         currentState = state;
         currentState.EnterState(this);
+    }
+
+    public IEnumerator RevealItemName()
+    {
+        // If going too fast, sometimes ItemAimedAt gets set to null, so dodge that case
+        string itemName = ItemAimedAt.GetComponent<ItemMetaData>().ItemName;
+        ItemNameDisplay.GetComponent<TextMeshProUGUI>().SetText(itemName);
+        ItemNameDisplay.GetComponent<Animator>().Play("ItemNameDisplay_fadeIn");
+        yield return new WaitForSeconds(0.0f);
     }
 }
